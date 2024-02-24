@@ -1,0 +1,7 @@
+/settings
+/venv
+/build
+/dist
+/output
+
+test.py
