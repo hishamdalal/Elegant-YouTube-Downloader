@@ -1,3 +1,12 @@
+# About
+This reposetory is learn you how to work with most of ttkBootstrap components, and solve most of ttkBootstrap problems
+- Bound `ctrl+v` to paste youtube url from clipboard
+- Fill compobox of video or audio resolution
+- Save settings
+- Modal window for settings
+- Modal window for translation
+- Save compobox selected option and load it as default value when modal open
+- and much more..
 
 # Development
 
