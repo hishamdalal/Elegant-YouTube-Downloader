@@ -10,7 +10,7 @@ import pytube.request
 
 import webbrowser
 
-# from icecream import ic
+from icecream import ic
 # from icecream import install
 # install()
 
@@ -64,8 +64,8 @@ class YPD:
     root = None
     menubar = None
     yt = None
-    skip_existing = True
-    override = False
+    skip_existing = True # StringVar()
+    _override = False # override value
     
     # ----------------------------------------------------------------------------                
     def __init__(self):
@@ -117,7 +117,7 @@ class YPD:
         _type = tb.StringVar()
         self._type = _type
 
-        skip_existing = BooleanVar()
+        skip_existing = BooleanVar(value=False)
         self.skip_existing = skip_existing
     # ----------------------------------------------------------------------------
     def init_current_settings(self):
@@ -133,8 +133,8 @@ class YPD:
     def set_current_settings(self):
         if len(self.current):
             self._type.set(self.current['type'])
-            self.override = self.current['override']
-            self.skip_existing.set(not self.override)
+            self._override = self.current['override']
+            self.skip_existing.set(not self._override)
     # ----------------------------------------------------------------------------
     def init_theme(self):
         themename = "superhero"
@@ -264,13 +264,13 @@ class YPD:
 
         self.qualities['state'] = 'readonly'
         
-        # override = bool(self.config.get('MAIN', 'override')) or False
+        # _override = bool(self.config.get('MAIN', 'override')) or False
         
         # skip_existing = IntVar()
         # self.skip_existing = skip_existing
         # override_var.set(value=True)
         
-        self.override = tb.Checkbutton(window, text="Override", variable=self.skip_existing, command=self.set_override)
+        self.override = tb.Checkbutton(window, text="Override", variable=self.skip_existing, command=self.set_override, onvalue=True, offvalue=False)
         self.override.grid(row=self.rownum, column=3)
         # self.override.state(["selected"])
                 
@@ -419,7 +419,8 @@ class YPD:
             self.fetch_data()
     # ----------------------------------------------------------------------------
     def set_override(self):
-        self.override = not self.skip_existing.get()
+        self._override =  not self.skip_existing.get()
+        # ic(self._override, self.skip_existing.get())
 
     # ----------------------------------------------------------------------------
     def get_description(self, yt) -> str:
@@ -447,9 +448,10 @@ class YPD:
         
         # Save user 'type' choice (audio or video)
         self.config.save('MAIN', 'type', self._type.get())
-        self.config.save('MAIN', 'override', (not self.skip_existing))
+        self.config.save('MAIN', 'override', (self.skip_existing.get()))
         
         # Refresh download_dir value
+        self.config.read()
         self.downloads_dir = self.config.get(section='MAIN', key='downloads_dir')
             
         # If no link in textbox or clipboard then stop
@@ -604,8 +606,8 @@ class YPD:
 
             except Exception as e:
                 # self.log_line("Unknown Error", e)
-                print("Unknown error:", e)
                 helper.show_error(e)
+                helper.msg("Error", e)
                 self.root.destroy()
         else:
             self.log_line("Error", "Not valid path or url, click ctrl+v to paste url")
@@ -618,6 +620,7 @@ class YPD:
         self.config.save('MAIN', 'override', (not self.skip_existing))
         
         # Refresh download_dir value
+        self.config.read()
         self.downloads_dir = self.config.get(section='MAIN', key='downloads_dir')
 
         threading.Thread(target=self.do_download).start()
@@ -643,7 +646,8 @@ class YPD:
 
                 # add resolution to filename
                 self.filename = str(helper.slugify(self.filename))
-                self.filename_with_ext = self.filename + "@" + res + self.ext
+                # self.filename_with_ext = self.filename + "@" + res + self.ext
+                self.filename_with_ext = self.filename + self.ext
                 
                 self.log_line('Proccess',  "Downloading...")
                 self.log_line('File name',  self.filename_with_ext)
@@ -652,7 +656,7 @@ class YPD:
                 # self.get_thumbnail()
                 
                 #> START DOWNLOADING ---------------------------
-                self.resource.download(output_path=self.downloads_dir, filename=self.filename_with_ext, skip_existing=self.override)
+                self.resource.download(output_path=self.downloads_dir, filename=self.filename_with_ext, skip_existing=self.skip_existing)
             
             else:
                 self.log_line('Error', 'No stream found!')
@@ -685,6 +689,7 @@ class YPD:
         self.file_extra_info = {}
     # ----------------------------------------------------------------------------    
     def log_info(self):
+        self.log_separator()
         for k in self.file_info:
             self.log_line(k, self.file_info[k])
     # ----------------------------------------------------------------------------

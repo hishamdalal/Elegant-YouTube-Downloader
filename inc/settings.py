@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import ttkbootstrap as tb
+
 from inc.config import YPD_Config
 # from inc.helper import window_center
 import inc.helper as helper
@@ -55,7 +56,8 @@ class YPD_Settings:
             helper.toast_notify("Save Setting", 'Settings saved successfully')
             
         except Exception as e:
-            print(e)
+            helper.show_error(e)
+
     # ----------------------------------------------------------------------------
     def init_current_settings(self):
         self.current['downloads_dir'] = self.config.get(section='MAIN', key='downloads_dir')
@@ -112,6 +114,7 @@ class YPD_Settings:
 
         self.theme_list = tb.Combobox(window, text="Themes", value=self.themes['light'])
         self.theme_list.grid(row=2, column=2)
+        self.theme_list['state'] = "readonly"
         # self.theme_list.current(0)
         # self.theme_list.bind("<<ComboboxSelected>>", self.save_settings())
         tb.Style(theme=self.theme_list.get())

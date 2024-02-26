@@ -93,6 +93,7 @@ class YPT_Translations:
         
         else:
             print("Couldn't set default values")
+            helper.msg('Error', "Couldn't set default values")
         
     # ----------------------------------------------------------------------------
     def save_settings(self, lang_from, lang_to):
@@ -103,17 +104,17 @@ class YPT_Translations:
             helper.toast_notify("Save Setting", 'Settings saved successfully')
             
         except Exception as e:
-            print(e)
+            helper.show_error(e)
    
     # ----------------------------------------------------------------------------
-    def set_url(self):
-        # string_var = StringVar()
-        # string_var.set(url)
-        # self.url_var2 = string_var
-        # video_id = self.url.split('?v=')[1]
-        # video_id = self.url_ctrl.get()
-        # self.url_var2.set(video_id)
-        pass        
+    # def set_url(self):
+    #     # string_var = StringVar()
+    #     # string_var.set(url)
+    #     # self.url_var2 = string_var
+    #     # video_id = self.url.split('?v=')[1]
+    #     # video_id = self.url_ctrl.get()
+    #     # self.url_var2.set(video_id)
+    #     pass        
     
     # ----------------------------------------------------------------------------
     def set_file_info(self):
@@ -123,7 +124,7 @@ class YPT_Translations:
             self.url_var2.set(self.video_id)
             
         else:
-            print('Errrrorrrr--------')
+            helper.msg('Error', "Couldn't set file info")
         
     # ----------------------------------------------------------------------------
     def layout(self, window):
@@ -249,7 +250,8 @@ class YPT_Translations:
             except Exception as e:
                 # self.method['toast_notify']("Error", "Couldn't downloaded translation")
                 # self.method['print_line']("Error", "Couldn't downloaded translation")
-                print('ERROR::', e)
+                helper.show_error(e)
+                helper.msg('Error', e)
     
     # ----------------------------------------------------------------------------
     def download_translate(self):
@@ -266,14 +268,14 @@ class YPT_Translations:
                               
                 lang_to = (lang_to.split(' - ')[0]).lower()
                 lang_from = (lang_from.split(' - ')[0]).lower()
-
                 
                 # print('lang_from', lang_from)
                 # print('lang_to', lang_to)
                 
                 filename = self.file_info['file_name']
                 self.download_dir = self.config.get("MAIN", 'downloads_dir')
-                self.download_path = self.download_dir +"/"+filename+"@"+lang_to+".srt"      
+                # self.download_path = self.download_dir +"/"+filename+"@"+lang_to+".srt"      
+                self.download_path = self.download_dir +"/"+filename+".srt"      
                 # YouTubeTranscriptApi.get_transcript(self.video_id, languages=['de', 'en'])
                 transcript_list = YouTubeTranscriptApi.list_transcripts(self.video_id)
                             
@@ -315,24 +317,23 @@ class YPT_Translations:
                     with open(self.download_path, 'w', encoding='utf-8') as srt_file:
                         srt_file.write(srt_formatted)
         
-                    print(self.download_path)
-                    print("SUCCESS")
-                    helper.explore_file(self.download_path)
+                    
+                    # helper.explore_file(self.download_path)
                     helper.toast_notify("Success", "Translation downloaded successfully")
                     # helper.print_line("Success", "Translation downloaded successfully")
                     
                 else:
-                    print("This video is not translatable!")  
+                    helper.msg('Error', "This video is not translatable!")  
                                     
             else:
                 # raise Exception("Video is is empty!")
-                print("Video is is empty!")
+                helper.msg('Error', "Video is is empty!")
                 
         # except TranscriptsDisabled as e:
         #     print('TranscriptsDisabled Exception::', e)
             
         except Exception as e:
-            print('Exception::', e)
+            Messagebox.ok(e)
             helper.show_error(e)
             
     # ----------------------------------------------------------------------------

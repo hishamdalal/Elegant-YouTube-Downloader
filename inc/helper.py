@@ -2,6 +2,7 @@ from pytube.exceptions import PytubeError
 # from slugify import slugify
 import ttkbootstrap as tb
 from ttkbootstrap.toast import ToastNotification
+from ttkbootstrap.dialogs import Messagebox
 
 import subprocess
 from pathvalidate import sanitize_filename
@@ -78,7 +79,12 @@ def show_error(e):
     print(f"Code: {code}")
     print(f"Function: {func}")
     print(e)
+    # Messagebox.ok(str(e), title="Error", alert=True, padding=(25, 25))
     # dump(traceback.extract_tb(e.__traceback__)[-1])
+
+def msg(title, body, alert=False, padding=(25, 25)):
+    Messagebox.ok(str(body), title=title, alert=alert, padding=padding)
+
 
 #
 # def cli_progress_bar(progress=0, total=100):
@@ -157,3 +163,4 @@ def bool(string):
         return True
     
     return False
+# ----------------------------------------------------------------------------
