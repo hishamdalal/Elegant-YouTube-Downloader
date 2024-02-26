@@ -33,7 +33,7 @@ This reposetory is learn you how to work with most of ttkBootstrap components, a
 
 1) install python
    
-2) Clone repo
+2) Clone repository or download it
 ``` cmd
 git clone https://github.com/hishamdalal/Elegant-YouTube-Downloader
 ```
