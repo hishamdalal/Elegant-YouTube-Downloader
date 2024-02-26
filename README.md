@@ -19,7 +19,7 @@
 # About
 This reposetory is learn you how to work with most of ttkBootstrap components, and solve most of ttkBootstrap problems.
 - Bound `ctrl+v` to paste youtube url from clipboard.
-- Use Threading for multitasking.
+- Use Threading for multitasking and prevent app freezing.
 - Fill compobox with video or audio resolution.
 - Save settings.
 - Modal window for settings.
