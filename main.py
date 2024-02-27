@@ -575,7 +575,7 @@ class YPD:
 
                         elif self._type.get() == "Audio":
                             self.resolutions.append(str(stream.itag) + " (" + str(file_size) + ")")
-                            self.file_info['itag ('+str(stream.itag)+')'] = str(stream.resolution)
+                            self.file_info['itag ('+str(i)+')'] = str(stream.itag)
 
                         self.qualities.config(values=self.resolutions, state=READONLY, takefocus=True)
                         self.qualities.current(0)
